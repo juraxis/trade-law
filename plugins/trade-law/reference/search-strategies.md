@@ -82,23 +82,31 @@ web_fetch("https://rulings.cbp.gov/ruling/{RULING_ID}")
 
 ## 3. CIT/CAFC Court Decisions
 
-### CIT Slip Opinions Index
+Sources are **not** co-equal. Follow this strict priority order:
+
+### Step 1: CIT Slip Opinions Index — identify decisions
 ```
 web_fetch("https://www.cit.uscourts.gov/content/slip-opinions-{YYYY}")
 ```
 - Returns: Structured table with opinion #, caption, date, docket, judge, jurisdiction code
 - Filter for jurisdiction code `1581(a)` = classification cases
-- Note: Actual opinion PDFs are binary and cannot be read via web_fetch
 
-### Justia Case Law (best for full text)
+### Step 2: Direct PDF Fetch — PRIMARY SOURCE for opinion text
+```
+web_fetch("https://www.cit.uscourts.gov/sites/cit/files/{slip-op-number}.pdf")
+```
+- Example: For Slip Op. 26-11, fetch `https://www.cit.uscourts.gov/sites/cit/files/26-11.pdf`
+- This is the primary source for opinion text. Always attempt this before using fallbacks.
+- Slip opinion PDFs can be fetched directly. If web_fetch cannot parse the PDF, fall back to Justia or Google site search.
+
+### Step 3: Fallback Sources — only if PDF fetch fails
 ```
 web_search("site:law.justia.com Court International Trade {product} classification")
 web_search("site:law.justia.com CIT {HTS heading} {year}")
 ```
 - Justia indexes full case text in readable format
-- Excellent for finding specific holdings and reasoning
+- Use only as a fallback when direct PDF fetch fails
 
-### Google-Indexed CIT Decisions
 ```
 web_search("Court of International Trade {HTS heading} classification")
 web_search("CIT {product type} classification {heading} GRI")

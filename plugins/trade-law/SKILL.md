@@ -82,6 +82,10 @@ If `web_fetch` is unavailable or blocked for a given domain, fall back to `web_s
 
 ## Workflow Router
 
+> **Scope Discipline:** Execute exactly what the user requests. Do not add adjacent research topics, related litigation, or background analysis beyond the stated scope. If the user asks to analyze 3 decisions, analyze those 3 — not 3 plus supplementary research.
+
+> **Source Priority:** Always prefer primary sources (court opinions from official court websites, HTSUS text from USITC, ruling text from CROSS) over secondary commentary (news, blogs, law firm articles). Secondary sources are fallbacks, not starting points.
+
 Detect the user's intent from their request and route to the appropriate workflow.
 
 ### Workflow 1: Classify a Product
@@ -119,10 +123,11 @@ Detect the user's intent from their request and route to the appropriate workflo
 **Output template:** `templates/cit-decision-brief.md`
 
 #### Steps:
-1. Identify the decision (by case name, docket number, slip opinion number, or topic).
-2. Execute the search and analysis protocol in `methodology/cit-decision-analysis.md`.
-3. Produce the trade-lawyer assessment per `templates/cit-decision-brief.md`.
-4. Include: decision summary, impact assessment, strategic analysis, precedent mapping.
+1. Fetch the CIT slip opinions index to identify the decision(s).
+2. Fetch the slip opinion PDF(s) directly from cit.uscourts.gov.
+3. Analyze the opinion text per `methodology/cit-decision-analysis.md`.
+4. Produce the trade-lawyer assessment per `templates/cit-decision-brief.md`.
+5. Include: decision summary, impact assessment, strategic analysis, precedent mapping.
 
 ---
 

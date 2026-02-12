@@ -6,43 +6,46 @@ This methodology defines how to search for, analyze, and assess Court of Interna
 
 ---
 
+## Scope Discipline
+
+- Analyze **exactly** the decisions the user asks for — no extras.
+- If the user says "latest 3," that means the 3 most recent slip opinions from the index — not 3 plus bonus research on related topics.
+- Do **not** add related topics, adjacent litigation, IEEPA analysis, or background research the user did not request.
+- Do **not** launch extra agents or research threads beyond what is needed to fulfill the stated request.
+
+---
+
 ## Phase 1: Decision Search
 
-### Multi-Source Search Protocol
+### Source Priority Protocol
 
-Execute these searches in sequence to find relevant decisions:
+Sources are **not** co-equal. Follow this strict priority order:
 
-**1. CIT Slip Opinions Index**
+**1. CIT Slip Opinions Index** — to identify which decisions exist
 ```
 web_fetch("https://www.cit.uscourts.gov/content/slip-opinions-{YYYY}")
 ```
 - Scan for cases involving the relevant HTS heading(s)
 - Filter by jurisdiction code: `1581(a)` for classification cases
-- Note: This gives case metadata only — not opinion text
+- This gives case metadata: slip opinion number, caption, date, docket, judge
 
-**2. Justia Case Law (best for full text)**
+**2. Direct PDF Fetch — THIS IS THE PRIMARY SOURCE**
+```
+web_fetch("https://www.cit.uscourts.gov/sites/cit/files/{slip-op-number}.pdf")
+```
+- Example: For Slip Op. 26-11, fetch `https://www.cit.uscourts.gov/sites/cit/files/26-11.pdf`
+- Read the actual opinion. All analysis must be based on the court's opinion text.
+- This is the authoritative source — do not skip this step.
+
+**3. Fallback Sources** — only if the PDF cannot be fetched or parsed
 ```
 web_search("site:law.justia.com Court International Trade {HTS heading} classification")
-web_search("site:law.justia.com CIT {product type} {heading}")
-```
-
-**3. Google-Indexed Decisions**
-```
 web_search("Court of International Trade {HTS heading} classification")
-web_search("CIT {product type} tariff classification GRI")
-```
-
-**4. CAFC Appeals**
-```
 web_search("CAFC {product type} HTS classification appeal")
-web_search("Federal Circuit {heading} tariff classification")
-```
-
-**5. Heading-Specific Deep Search**
-```
-web_search("CIT heading {XXXX} classification {year range}")
 web_search("{product} v. United States tariff classification")
 ```
+- Use Justia or Google search **only** as a fallback when direct PDF fetch fails.
+- These are secondary sources, not starting points.
 
 ### Decision Selection Criteria
 
@@ -56,6 +59,8 @@ Prioritize decisions that are:
 ---
 
 ## Phase 2: Decision Summarization
+
+> **Source Discipline:** All analysis must be based on the court's opinion text. Do not cite or rely on news articles, blog posts, law firm commentary, or magazine coverage as sources for the court's reasoning or holding. If you cannot access the opinion text directly, state that limitation explicitly rather than substituting secondary commentary.
 
 For each relevant decision found, extract and synthesize:
 
