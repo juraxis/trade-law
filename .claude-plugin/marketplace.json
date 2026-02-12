@@ -1,0 +1,13 @@
+{
+  "name": "juraxis",
+  "owner": {
+    "name": "Juraxis"
+  },
+  "plugins": [
+    {
+      "name": "trade-law",
+      "source": "./plugins/trade-law",
+      "description": "U.S. trade & customs: HTS classification, CROSS rulings, CIT/CAFC decisions, duty rates, origin, compliance"
+    }
+  ]
+}

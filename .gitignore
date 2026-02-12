@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Environment
+.env
+.venv/
+
+# Misc
+node_modules/
+*.log
+
+# Internal documents
+trade-customs-skill-architecture.md
+trade-customs-skill-v2.md
+
+# Internal testing (developer-only)
+evals/
+scripts/eval-runner.py
+
+# Local settings (users configure their own)
+.claude/settings.local.json
