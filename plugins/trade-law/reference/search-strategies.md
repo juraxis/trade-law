@@ -91,15 +91,16 @@ web_fetch("https://www.cit.uscourts.gov/content/slip-opinions-{YYYY}")
 - Returns: Structured table with opinion #, caption, date, docket, judge, jurisdiction code
 - Filter for jurisdiction code `1581(a)` = classification cases
 
-### Step 2: Direct PDF Fetch — PRIMARY SOURCE for opinion text
+### Step 2: PDF Text Extraction — PRIMARY SOURCE for opinion text
 ```
-web_fetch("https://www.cit.uscourts.gov/sites/cit/files/{slip-op-number}.pdf")
+bash: python3 plugins/trade-law/scripts/cit-opinion-fetcher.py {slip-op-number}
 ```
-- Example: For Slip Op. 26-11, fetch `https://www.cit.uscourts.gov/sites/cit/files/26-11.pdf`
-- This is the primary source for opinion text. Always attempt this before using fallbacks.
-- Slip opinion PDFs can be fetched directly. If web_fetch cannot parse the PDF, fall back to Justia or Google site search.
+- Example: `python3 plugins/trade-law/scripts/cit-opinion-fetcher.py 26-11`
+- Downloads the PDF from `cit.uscourts.gov` and extracts full text using pymupdf
+- Also accepts a full URL or local file path
+- This is the primary source for opinion text. Always use this before fallbacks.
 
-### Step 3: Fallback Sources — only if PDF fetch fails
+### Step 3: Fallback Sources — only if PDF reader is unavailable
 ```
 web_search("site:law.justia.com Court International Trade {product} classification")
 web_search("site:law.justia.com CIT {HTS heading} {year}")

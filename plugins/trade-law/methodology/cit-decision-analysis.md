@@ -29,15 +29,16 @@ web_fetch("https://www.cit.uscourts.gov/content/slip-opinions-{YYYY}")
 - Filter by jurisdiction code: `1581(a)` for classification cases
 - This gives case metadata: slip opinion number, caption, date, docket, judge
 
-**2. Direct PDF Fetch — THIS IS THE PRIMARY SOURCE**
+**2. PDF Text Extraction — THIS IS THE PRIMARY SOURCE**
 ```
-web_fetch("https://www.cit.uscourts.gov/sites/cit/files/{slip-op-number}.pdf")
+bash: python3 plugins/trade-law/scripts/cit-opinion-fetcher.py {slip-op-number}
 ```
-- Example: For Slip Op. 26-11, fetch `https://www.cit.uscourts.gov/sites/cit/files/26-11.pdf`
+- Example: `python3 plugins/trade-law/scripts/cit-opinion-fetcher.py 26-11`
+- Downloads the PDF from `cit.uscourts.gov` and extracts full text using pymupdf
 - Read the actual opinion. All analysis must be based on the court's opinion text.
 - This is the authoritative source — do not skip this step.
 
-**3. Fallback Sources** — only if the PDF cannot be fetched or parsed
+**3. Fallback Sources** — only if the PDF reader is unavailable
 ```
 web_search("site:law.justia.com Court International Trade {HTS heading} classification")
 web_search("Court of International Trade {HTS heading} classification")

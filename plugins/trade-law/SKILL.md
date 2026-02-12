@@ -69,8 +69,20 @@ web_search("site:rulings.cbp.gov {product} {HTS heading}")
 Direct fetch of `rulings.cbp.gov/ruling/{ID}` returns empty JS shell. Full query patterns in `reference/search-strategies.md`.
 
 ### CIT/CAFC Decisions
+
+**Step 1: Identify decisions** from the slip opinions index:
 ```
 web_fetch("https://www.cit.uscourts.gov/content/slip-opinions-{YYYY}")
+```
+
+**Step 2: Extract opinion text** using the built-in PDF reader (PRIMARY method):
+```
+bash: python3 plugins/trade-law/scripts/cit-opinion-fetcher.py {slip-op-number}
+```
+Example: `python3 plugins/trade-law/scripts/cit-opinion-fetcher.py 26-11` extracts the full text of Slip Op. 26-11. Accepts a slip op number, full URL, or local file path. Requires `pymupdf`.
+
+**Step 3: Fallback** — only if the PDF reader is unavailable:
+```
 web_search("site:law.justia.com Court International Trade {product}")
 ```
 Full search patterns in `reference/search-strategies.md`.
