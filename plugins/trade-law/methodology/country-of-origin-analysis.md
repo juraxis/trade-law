@@ -30,7 +30,7 @@ The country of origin for marking is the country where the article underwent its
 ```
 web_search("CBP country of origin marking {product type}")
 web_search("19 CFR 134 substantial transformation {product}")
-web_search("site:rulings.cbp.gov country of origin {product}")
+web_fetch("https://rulings.cbp.gov/search?term=country+of+origin+{product}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
 
 ### Special Rules

@@ -62,11 +62,15 @@ web_fetch("https://hts.usitc.gov/reststop/file?release=currentRelease&filename=C
 Binary PDF — recommend user download. The REST API does **not** include chapter or section notes.
 
 ### CROSS Rulings
-Best method is Google site search:
+Best method is the direct CROSS search URL (returns current results sorted by date):
 ```
-web_search("site:rulings.cbp.gov {product} {HTS heading}")
+web_fetch("https://rulings.cbp.gov/search?term={keywords}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
-Direct fetch of `rulings.cbp.gov/ruling/{ID}` returns empty JS shell. Full query patterns in `reference/search-strategies.md`.
+For individual rulings, fetch the ruling page directly:
+```
+web_fetch("https://rulings.cbp.gov/ruling/{RULING_ID}")
+```
+Full query patterns in `reference/search-strategies.md`.
 
 ### CIT/CAFC Decisions
 
@@ -107,12 +111,11 @@ Detect the user's intent from their request and route to the appropriate workflo
 
 #### Steps:
 1. **INTAKE** — Extract product characteristics (name, materials, function, mechanism, end use, physical specs, country of origin). If any are unclear, ASK before proceeding.
-2. **HEADING IDENTIFICATION** — Query USITC REST API with 2-3 keyword variations. Identify 2-4 candidate 4-digit headings. Cross-reference with `reference/section-chapter-map.json`.
-3. **GRI ANALYSIS** — Follow `methodology/gri-analysis.md` systematically through GRI 1-6. Apply `methodology/interpretive-frameworks.md` for heading text interpretation (eo nomine vs. use-based, canons of construction, EN methodology). Apply `methodology/essential-character-doctrine.md` if GRI 3(b) is reached. Apply `methodology/additional-us-rules.md` where relevant. Assess classification confidence per `methodology/classification-confidence.md`. Document which GRI resolved the classification.
-4. **CROSS RESEARCH** — Follow `methodology/cross-ruling-research.md`. Find 3-5 relevant rulings. Evaluate recency, factual similarity, and authority level.
-5. **CIT/CAFC CHECK** — Follow `methodology/cit-decision-analysis.md`. Search for judicial decisions on candidate headings. Cross-reference with CROSS findings. Flag conflicts.
-6. **DUTY COMPILATION** — Follow `methodology/duty-rate-compilation.md`. Compile General + Special + Column 2 + Chapter 99 surcharges + AD/CVD.
-7. **DELIVERABLE** — Generate classification memo per `templates/classification-memo.md`. Include all flags from `reference/human-review-triggers.md`. Append disclaimer from `reference/disclaimers.md`.
+2. **CLASSIFICATION ANALYSIS** — Apply legal knowledge directly: identify candidate headings, apply GRI 1-6 per `methodology/gri-analysis.md`, apply `methodology/interpretive-frameworks.md` for heading text interpretation (eo nomine vs. use-based, canons of construction, EN methodology), apply `methodology/essential-character-doctrine.md` if GRI 3(b) is reached, apply `methodology/additional-us-rules.md` where relevant. Assess classification confidence per `methodology/classification-confidence.md`. Present the draft classification with known precedent and duty rate knowledge.
+3. **USITC RATE VERIFICATION** — Query USITC REST API to confirm current duty rates for the recommended subheading. Cross-reference with `reference/section-chapter-map.json`. Follow `methodology/duty-rate-compilation.md` to compile General + Special + Column 2 + Chapter 99 surcharges + AD/CVD.
+4. **OFFER CROSS VERIFICATION** — Ask the user: "Want me to verify this classification against CROSS rulings?" If yes → follow `methodology/cross-ruling-research.md`, find 3-5 relevant rulings, evaluate recency, factual similarity, and authority level. If no → proceed to deliverable.
+5. **CIT/CAFC CHECK** — Only if the user requests deep verification or the classification is genuinely novel/contested: follow `methodology/cit-decision-analysis.md`, search for judicial decisions on candidate headings, cross-reference with CROSS findings, flag conflicts.
+6. **DELIVERABLE** — Generate classification memo per `templates/classification-memo.md`. Include all flags from `reference/human-review-triggers.md`. Append disclaimer from `reference/disclaimers.md`.
 
 ---
 

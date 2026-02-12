@@ -23,7 +23,7 @@ Status:         DRAFT — For Attorney/Broker Review
 ### 1. Research Scope
 
 - **Product/issue researched:** {description of what was searched}
-- **Search terms used:** {list the actual web_search queries executed}
+- **Search terms used:** {list the actual CROSS search queries executed}
 - **Date range of rulings found:** {earliest} to {most recent}
 - **Total rulings reviewed:** {number}
 - **Relevant rulings selected:** {number}

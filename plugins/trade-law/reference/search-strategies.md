@@ -44,39 +44,36 @@ web_search("HTS chapter {N} notes {relevant note topic}")
 
 ## 2. CROSS Ruling Research
 
-### Primary Method — Google Site Search (validated, best results)
+### Primary Method — Direct CROSS Search URL
 ```
-web_search("site:rulings.cbp.gov {product} {HTS heading}")
-web_search("site:rulings.cbp.gov {product description} classification")
-web_search("CBP CROSS ruling {product type} classification {heading}")
-web_search("{product type} tariff classification ruling CBP")
+web_fetch("https://rulings.cbp.gov/search?term={product+keywords}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
-- Google indexes the full ruling text from the CROSS SPA
-- Returns: Ruling number, full legal analysis, HTS classification, cross-references
+- Returns: Current rulings sorted by date (newest first)
+- URL-encode search terms (spaces as `+`)
+- Adjust `collection`: `ALL` (default), `HQ` (Headquarters only), `NY` (New York only)
+- Adjust `pageSize` (max 30) and `page` for pagination
 
-### Direct Ruling URL (for known ruling IDs)
+### Individual Ruling Fetch
 ```
 web_fetch("https://rulings.cbp.gov/ruling/{RULING_ID}")
 ```
-- **Warning:** CROSS is a JS SPA — `web_fetch` returns empty shell
-- Use the ruling ID from search results and reference it for the attorney
-- Alternatively, search for the specific ruling number via web_search
+- Returns: Full ruling text including product description, classification, reasoning, and status
+- Use for achieving **Verified** evidence quality
 
-### Boolean Search Patterns (for use within CROSS interface)
+### Boolean Search Patterns (supported in the `term` parameter)
 - AND: `keyboard AND bluetooth AND 8471`
 - OR: `smartwatch OR "smart watch" OR "wrist computer"`
 - AND NOT: `keyboard AND NOT piano`
 - NEAR: `essential NEAR character` (finds terms in proximity)
 - Wildcard: `comput*` (matches computer, computing, computation)
 - Exact phrase: `"essential character"`
-- Collections: ALL (default), HQ (Headquarters only), NY (New York only)
 
 ### Ruling Research Strategy
-1. Start broad: `web_search("site:rulings.cbp.gov {product name}")`
-2. Narrow by heading: `web_search("site:rulings.cbp.gov {product} {4-digit heading}")`
-3. Search for GRI-specific reasoning: `web_search("CBP ruling {product} essential character GRI 3")`
-4. Check for revocations: `web_search("CBP ruling revoked {ruling number}")`
-5. Find HQ rulings: `web_search("site:rulings.cbp.gov HQ {product} {heading}")`
+1. Start broad: `web_fetch` with product keywords, `collection=ALL`, `sortBy=DATE_DESC`
+2. Narrow by heading: add the 4-digit heading to the search terms
+3. Focus on HQ rulings: set `collection=HQ` for authoritative Headquarters rulings
+4. Fetch individual rulings: `web_fetch("https://rulings.cbp.gov/ruling/{ID}")` for full text
+5. Check for revocations: look for revocation/modification notices in the ruling text
 
 ---
 
@@ -171,7 +168,7 @@ web_search("Commerce Department scope ruling {product} {country}")
 ```
 web_search("CBP country of origin marking {product type}")
 web_search("19 CFR 134 substantial transformation {product}")
-web_search("site:rulings.cbp.gov country of origin {product}")
+web_fetch("https://rulings.cbp.gov/search?term=country+of+origin+{product}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
 
 ### FTA Rules of Origin
@@ -211,25 +208,11 @@ web_search("site:federalregister.gov customs {product} {current_year}")
 
 ---
 
-## CROSS API Investigation (Developer Note)
-
-The CROSS SPA at `rulings.cbp.gov` likely makes XHR calls to an internal REST API for search and ruling retrieval. If this API endpoint can be identified, it would provide a more reliable retrieval method than Google snippet indexing.
-
-**Investigation approach (developer task, not a Claude runtime task):**
-1. Open Chrome DevTools → Network tab → XHR filter
-2. Navigate to `rulings.cbp.gov` and perform a search
-3. Capture the endpoint URL, request headers, and response format
-4. Document the API contract (query parameters, response schema, pagination)
-
-If discovered, document the endpoint here and add as a primary retrieval method in `methodology/cross-ruling-research.md`. This would enable **Verified** evidence quality (see evidence quality protocol) for all rulings retrieved via the API.
-
----
-
 ## Search Strategy Tips
 
 1. **Always search with the current year** to get the most recent information
 2. **Use multiple keyword variations** — trade terminology may differ from common language
-3. **Prioritize site-specific searches** (`site:rulings.cbp.gov`, `site:law.justia.com`) for authoritative sources
+3. **Prioritize direct source access** (CROSS search URL for rulings, `site:law.justia.com` for CIT decisions) over general web search
 4. **Cross-reference** results from multiple searches — no single search captures everything
 5. **Check footnotes** in HTS API results for Chapter 99 cross-references (e.g., "See 9903.88.15")
 6. **REST API first** for HTS data, then web_search for context and interpretation

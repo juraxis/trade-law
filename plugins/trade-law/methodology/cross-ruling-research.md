@@ -8,37 +8,33 @@ The Customs Rulings Online Search System (CROSS) contains 219,915+ searchable CB
 
 ## Search Protocol
 
-### Step 1: Initial Broad Search
+### Step 1: Primary Search — Direct CROSS URL
+Search CROSS directly using the search URL (returns current results sorted by date):
 ```
-web_search("site:rulings.cbp.gov {product name} classification")
-web_search("CBP CROSS ruling {product type} classification")
+web_fetch("https://rulings.cbp.gov/search?term={product+keywords}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
+- URL-encode the search term (spaces as `+`)
+- Use concise product keywords (e.g., `outdoor+gas+grill`, `bluetooth+keyboard`)
+- `collection=ALL` searches both NY and HQ rulings; use `collection=HQ` or `collection=NY` to narrow
 
-### Step 2: Heading-Specific Search
+### Step 2: Heading-Specific Refinement
+If the primary search returns too many or too few results, refine by adding the HTS heading to the search terms:
 ```
-web_search("site:rulings.cbp.gov {product} {4-digit heading}")
-web_search("site:rulings.cbp.gov {product} {alternative heading}")
+web_fetch("https://rulings.cbp.gov/search?term={product+keywords}+{4-digit+heading}&collection=ALL&commodityGrouping=ALL&sortBy=DATE_DESC&pageSize=30&page=1")
 ```
+- Try alternative headings if the first returns no results
+- Use `collection=HQ` to focus on authoritative Headquarters rulings
 
-### Step 3: GRI-Specific Search (if applicable)
+### Step 3: Ruling Detail Fetch
+For each relevant ruling found, fetch the full ruling page:
 ```
-web_search("CBP ruling {product type} essential character GRI 3")
-web_search("site:rulings.cbp.gov {product} GRI {number}")
+web_fetch("https://rulings.cbp.gov/ruling/{RULING_ID}")
 ```
+- Extract: product description, classification, GRI applied, key reasoning, date, status
+- Check for revocation/modification notices in the ruling text
+- This is the primary method for achieving **Verified** evidence quality (see Evidence Quality Protocol below)
 
-### Step 4: HQ Ruling Search (for authoritative rulings)
-```
-web_search("site:rulings.cbp.gov HQ {product type} {heading}")
-web_search("CBP Headquarters ruling {product} classification")
-```
-
-### Step 5: Revocation/Modification Check
-```
-web_search("CBP ruling revoked {ruling number}")
-web_search("CBP ruling modified {ruling number}")
-```
-
-### Additional Patterns (from `reference/search-strategies.md`)
+### Additional Patterns
 See `reference/search-strategies.md` for the complete set of validated search patterns including Boolean syntax for the CROSS interface.
 
 ---
