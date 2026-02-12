@@ -1,6 +1,6 @@
 {
   "name": "trade-law",
-  "description": "U.S. trade & customs classification, CROSS ruling research, CIT/CAFC analysis, duty rates, and compliance review",
+  "description": "Research-grade U.S. customs classification and trade compliance assistant. Produces attorney-reviewable draft work product with enforced HTSUS authority hierarchy across GRI analysis, CROSS rulings, CIT/CAFC decisions, duty compilation, origin determination, and compliance review.",
   "version": "1.0.0",
   "author": {
     "name": "Juraxis"

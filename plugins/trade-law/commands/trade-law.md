@@ -1,5 +1,5 @@
 ---
-description: HTS classification, CROSS/CIT research, duty rates, origin analysis, and compliance review for U.S. imports
+description: U.S. trade law and customs compliance — HTS classification, CROSS ruling research, CIT/CAFC court analysis, duty compilation, origin determination, and import compliance review
 ---
 
 Read and follow the full instructions in `SKILL.md` to handle the user's trade & customs request.

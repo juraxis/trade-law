@@ -7,7 +7,7 @@
     {
       "name": "trade-law",
       "source": "./plugins/trade-law",
-      "description": "U.S. trade & customs: HTS classification, CROSS rulings, CIT/CAFC decisions, duty rates, origin, compliance"
+      "description": "Research-grade U.S. customs classification and trade compliance assistant for licensed attorneys and customs brokers. Produces structured draft work product across the full import compliance pipeline — systematic GRI 1-6 tariff analysis, CROSS ruling research, CIT/CAFC decision briefing, complete duty compilation with Chapter 99 surcharges, country of origin determination, and end-to-end compliance review — with enforced authority hierarchy, confidence scoring, and human review triggers."
     }
   ]
 }
